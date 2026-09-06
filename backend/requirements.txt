@@ -1,6 +1,4 @@
 pennylane
-torch
-torchvision
 fastapi
 uvicorn[standard]
 opencv-python-headless
