@@ -493,7 +493,7 @@ Provide a concise 2-3 sentence diagnostic impression. Be honest — if scores ar
         import io
         img = Image.open(io.BytesIO(image_bytes))
 
-        model = genai.GenerativeModel("gemini-2.0-flash-lite")
+        model = genai.GenerativeModel("gemini-3.5-flash-lite")
         response = model.generate_content([prompt, img])
         return response.text
 
