@@ -117,6 +117,7 @@ export const XRayAnalysisPage: React.FC = () => {
       });
     } catch (err) {
       console.error("X-Ray upload failed:", err);
+      alert("Analysis failed or timed out! If you are using Render's free tier, the backend might be asleep. Please wait a minute and try again.");
     } finally {
       setIsAnalyzing(false);
     }
