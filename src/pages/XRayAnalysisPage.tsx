@@ -177,7 +177,7 @@ export const XRayAnalysisPage: React.FC = () => {
     <div className="w-full min-h-[calc(100vh-68px)] font-sans bg-[#f4f2eb] animate-fade-in text-[#111111] pb-6">
       <PatientNavTabs currentTab="xray" />
       
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 py-3 space-y-3">
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-8 lg:px-10 py-3 space-y-3">
         
         {/* Header & Back Button */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#e5e2d9] pb-2.5">

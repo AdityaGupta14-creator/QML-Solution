@@ -56,11 +56,11 @@ export function PatientNavTabs({ currentTab }: PatientNavTabsProps) {
 
         <nav className="flex items-center gap-4 sm:gap-8 overflow-x-auto scrollbar-hide -mx-4 sm:mx-0 px-4 sm:px-0 pb-0">
           {[
-            { id: 'overview', label: 'Overview', path: `/patient/${patient.id}` },
-            { id: 'qml', label: 'QML Comparison', path: `/patient/${patient.id}/qml` },
-            { id: 'trends', label: 'Live Vitals', path: `/patient/${patient.id}/trends` },
-            { id: 'xray', label: 'X-Ray', path: `/patient/${patient.id}/xray` },
-            { id: 'notes', label: 'Notes', path: `/patient/${patient.id}/notes` },
+            { id: 'overview', fullLabel: 'Overview', shortLabel: 'Overview', path: `/patient/${patient.id}` },
+            { id: 'qml', fullLabel: 'QML Comparison', shortLabel: 'QML', path: `/patient/${patient.id}/qml` },
+            { id: 'trends', fullLabel: 'Live Vitals & Trends', shortLabel: 'Live Vitals', path: `/patient/${patient.id}/trends` },
+            { id: 'xray', fullLabel: 'Radiology X-Ray', shortLabel: 'X-Ray', path: `/patient/${patient.id}/xray` },
+            { id: 'notes', fullLabel: 'Clinical Notes', shortLabel: 'Notes', path: `/patient/${patient.id}/notes` },
           ].map((tab) => (
             <NavLink
               key={tab.id}
@@ -74,7 +74,8 @@ export function PatientNavTabs({ currentTab }: PatientNavTabsProps) {
                 }`
               }
             >
-              {tab.label}
+              <span className="hidden sm:inline">{tab.fullLabel}</span>
+              <span className="sm:hidden">{tab.shortLabel}</span>
             </NavLink>
           ))}
         </nav>

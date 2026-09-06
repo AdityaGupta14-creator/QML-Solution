@@ -27,7 +27,7 @@ function AppRoutes() {
   return (
     <div className="min-h-screen bg-[#f5f2ed]">
       {isAuthenticated && <Header />}
-      <main className={isAuthenticated ? 'pt-[68px]' : ''}>
+      <main className={isAuthenticated ? 'pt-[52px] sm:pt-[60px]' : ''}>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           

@@ -49,7 +49,7 @@ export const PatientOverviewPage: React.FC = () => {
     <div className="w-full min-h-[calc(100vh-68px)] font-sans bg-[#f4f2eb] animate-fade-in text-[#111111]">
       <PatientNavTabs currentTab="overview" />
       
-      <div className="px-6 sm:px-10 py-4 max-w-7xl mx-auto space-y-4">
+      <div className="px-3.5 sm:px-8 lg:px-10 py-4 max-w-7xl mx-auto space-y-4">
         
         {/* Sub-header with Back Button & Alert */}
         <div className="flex items-center justify-between">
@@ -83,12 +83,14 @@ export const PatientOverviewPage: React.FC = () => {
         )}
 
         {/* REAL-TIME LIVE FLUCTUATING VITALS CARDS (COMPACT SINGLE ROW) */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
           <VitalCard icon={Heart} title="Heart Rate" value={liveVitals.heartRate} unit="bpm" status="Live" statusClass="bg-[#c49332]/10 text-[#c49332]" />
           <VitalCard icon={Droplets} title="SpO2" value={liveVitals.spo2} unit="%" status="Live" statusClass="bg-[#5a8a6e]/10 text-[#5a8a6e]" />
           <VitalCard icon={Wind} title="Resp Rate" value={liveVitals.respRate} unit="br/min" status="Live" statusClass="bg-[#c49332]/10 text-[#c49332]" />
           <VitalCard icon={Thermometer} title="Temperature" value={liveVitals.tempC} unit="°C" status="Live" statusClass="bg-[#5a8a6e]/10 text-[#5a8a6e]" />
-          <VitalCard icon={Scale} title="BMI" value={patient.profile?.bmi || "21.4"} unit="kg/m²" status="Normal" statusClass="bg-[#5a8a6e]/10 text-[#5a8a6e]" />
+          <div className="col-span-2 sm:col-span-1">
+            <VitalCard icon={Scale} title="BMI" value={patient.profile?.bmi || "21.4"} unit="kg/m²" status="Normal" statusClass="bg-[#5a8a6e]/10 text-[#5a8a6e]" />
+          </div>
         </div>
 
         {/* THREE-COLUMN INTEGRATED ZERO-SCROLL MEDICAL RECORD VIEW */}

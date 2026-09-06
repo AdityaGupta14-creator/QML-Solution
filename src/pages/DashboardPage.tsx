@@ -43,11 +43,11 @@ export function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f2eb] pt-6 pb-16 font-sans text-[#111111] animate-fade-in">
-      <div className="max-w-7xl mx-auto px-6 sm:px-12">
+    <div className="min-h-screen bg-[#f4f2eb] pt-4 sm:pt-6 pb-16 font-sans text-[#111111] animate-fade-in">
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-8 lg:px-12">
         
         {/* Navigation & Header Section */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#e5e2d9] pb-6 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#e5e2d9] pb-6 mb-6 sm:mb-8">
           <div>
             <div className="flex items-center gap-3 mb-1">
               <Link to="/login" className="text-xs font-semibold text-[#6b6b6b] hover:text-[#111] transition-colors flex items-center gap-1">
@@ -56,8 +56,8 @@ export function DashboardPage() {
               <span className="text-[#9a9590]">|</span>
               <span className="text-xs font-mono text-[#5a8a6e] font-semibold uppercase tracking-wider">Hospital Node #IN-DELHI-04</span>
             </div>
-            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#111111]">Active Patient Surveillance Queue</h1>
-            <p className="text-sm text-[#6b6b6b] mt-1">Real-time QML Tuberculosis Risk Monitoring & Clinical Triage</p>
+            <h1 className="font-serif text-2xl sm:text-4xl font-bold text-[#111111]">Active Patient Surveillance Queue</h1>
+            <p className="text-xs sm:text-sm text-[#6b6b6b] mt-1">Real-time QML Tuberculosis Risk Monitoring & Clinical Triage</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -69,31 +69,31 @@ export function DashboardPage() {
         </div>
 
         {/* Prominent Stats Overview Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-          <div className="bg-white p-7 rounded-2xl border border-[#d4d0ca] shadow-sm flex items-center justify-between">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-6 mb-8 sm:mb-10">
+          <div className="bg-white p-5 sm:p-7 rounded-2xl border border-[#d4d0ca] shadow-sm flex items-center justify-between">
             <div>
               <span className="text-xs font-mono uppercase tracking-wider text-[#6b6b6b]">Total Cohort Patients</span>
-              <div className="font-serif text-4xl font-bold text-[#111111] mt-1">{PATIENTS_LIST.length}</div>
+              <div className="font-serif text-3xl sm:text-4xl font-bold text-[#111111] mt-1">{PATIENTS_LIST.length}</div>
             </div>
             <div className="w-12 h-12 rounded-xl bg-[#f4f2eb] flex items-center justify-center text-[#111111]">
               <UserCheck size={24} />
             </div>
           </div>
 
-          <div className="bg-white p-7 rounded-2xl border border-[#d4d0ca] shadow-sm flex items-center justify-between">
+          <div className="bg-white p-5 sm:p-7 rounded-2xl border border-[#d4d0ca] shadow-sm flex items-center justify-between">
             <div>
               <span className="text-xs font-mono uppercase tracking-wider text-[#6b6b6b]">High Risk Critical Cases</span>
-              <div className="font-serif text-4xl font-bold text-[#c2484a] mt-1">{criticalCount}</div>
+              <div className="font-serif text-3xl sm:text-4xl font-bold text-[#c2484a] mt-1">{criticalCount}</div>
             </div>
             <div className="w-12 h-12 rounded-xl bg-[#c2484a]/10 flex items-center justify-center text-[#c2484a]">
               <ShieldAlert size={24} />
             </div>
           </div>
 
-          <div className="bg-[#111111] text-white p-7 rounded-2xl shadow-md flex items-center justify-between">
+          <div className="bg-[#111111] text-white p-5 sm:p-7 rounded-2xl shadow-md flex items-center justify-between">
             <div>
               <span className="text-xs font-mono uppercase tracking-wider text-[#a8d5ba]">Mean QML Risk Score</span>
-              <div className="font-mono text-4xl font-bold text-[#a8d5ba] mt-1">{avgQmlRisk}%</div>
+              <div className="font-mono text-3xl sm:text-4xl font-bold text-[#a8d5ba] mt-1">{avgQmlRisk}%</div>
             </div>
             <div className="w-12 h-12 rounded-xl bg-[#222222] flex items-center justify-center text-[#a8d5ba]">
               <Activity size={24} />
@@ -102,13 +102,13 @@ export function DashboardPage() {
         </div>
 
         {/* Filters and Search Bar */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-          <div className="flex gap-2 flex-wrap">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6 sm:mb-8">
+          <div className="flex gap-2 flex-wrap w-full md:w-auto">
             {(['All', 'Critical', 'Urgent', 'Stable'] as FilterType[]).map((filter) => (
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`px-5 py-2 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                   activeFilter === filter
                     ? 'bg-[#111111] text-white shadow'
                     : 'bg-white border border-[#d4d0ca] text-[#6b6b6b] hover:border-[#111111]'
@@ -132,12 +132,12 @@ export function DashboardPage() {
         </div>
 
         {/* Fully Clickable Patient Grid Cards */}
-        <div className="space-y-5">
+        <div className="space-y-4 sm:space-y-5">
           {filteredPatients.map((patient) => (
             <div 
               key={patient.id}
               onClick={() => handleReviewPatient(patient.id)}
-              className={`bg-white rounded-2xl border border-[#d4d0ca] border-l-[6px] ${getBorderColor(patient.triageLevel)} shadow-sm hover:shadow-md hover:border-[#111111] transition-all p-7 flex flex-col md:flex-row items-center gap-8 cursor-pointer group`}
+              className={`bg-white rounded-2xl border border-[#d4d0ca] border-l-[6px] ${getBorderColor(patient.triageLevel)} shadow-sm hover:shadow-md hover:border-[#111111] transition-all p-4 sm:p-7 flex flex-col md:flex-row items-stretch md:items-center gap-5 sm:gap-8 cursor-pointer group`}
             >
               <div className="flex-1 space-y-3">
                 <div className="flex items-center justify-between">

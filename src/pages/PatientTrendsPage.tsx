@@ -59,8 +59,10 @@ export const PatientTrendsPage: React.FC = () => {
   const patientId = id || synthPatient.id;
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6 pb-16 px-4 sm:px-6 font-sans bg-[#f4f2eb] animate-fade-in text-[#111111]">
+    <div className="w-full min-h-[calc(100vh-60px)] font-sans bg-[#f4f2eb] animate-fade-in text-[#111111] pb-16">
       <PatientNavTabs currentTab="trends" />
+      
+      <div className="max-w-7xl mx-auto space-y-6 px-4 sm:px-8 lg:px-10 py-4">
       
       {/* Top Header & Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#e5e2d9] pb-6">
@@ -216,6 +218,7 @@ export const PatientTrendsPage: React.FC = () => {
             </LineChart>
           </ResponsiveContainer>
         </div>
+      </div>
       </div>
     </div>
   );

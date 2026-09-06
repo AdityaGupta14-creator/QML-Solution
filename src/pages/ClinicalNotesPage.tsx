@@ -133,8 +133,10 @@ PLAN:
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-6 pb-20 px-4 sm:px-6 font-sans animate-fade-in">
+    <div className="w-full min-h-[calc(100vh-60px)] font-sans bg-[#f5f2ed] animate-fade-in pb-20">
       <PatientNavTabs currentTab="notes" />
+      
+      <div className="w-full max-w-5xl mx-auto space-y-6 px-4 sm:px-6 lg:px-8 py-4">
       
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#e5e2d9] pb-6">
         <div>
@@ -269,6 +271,7 @@ PLAN:
             </div>
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

@@ -166,12 +166,19 @@ export default function LoginPage() {
           <div className="mb-8">
             <button
               ref={mainBtnRef}
-              onClick={() => setIsZoomedIn(true)}
+              onClick={() => {
+                setIsZoomedIn(true);
+                if (window.innerWidth < 768) {
+                  setTimeout(() => {
+                    document.getElementById('robot-container')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }, 150);
+                }
+              }}
               onMouseEnter={() => setIsNearButton(true)}
-              className="inline-flex items-center gap-4 px-10 py-5 bg-[#111111] text-white rounded-full font-bold text-lg hover:bg-black transition-all shadow-xl group cursor-pointer border border-[#333]"
+              className="inline-flex items-center gap-3 sm:gap-4 px-6 sm:px-10 py-3.5 sm:py-5 bg-[#111111] text-white rounded-full font-bold text-base sm:text-lg hover:bg-black transition-all shadow-xl group cursor-pointer border border-[#333]"
             >
               Access Clinical Workspace
-              <ArrowRight size={22} className="group-hover:translate-x-1.5 transition-transform text-[#f48b8b]" />
+              <ArrowRight size={20} className="group-hover:translate-x-1.5 transition-transform text-[#f48b8b]" />
             </button>
           </div>
 
@@ -189,7 +196,7 @@ export default function LoginPage() {
         </div>
 
         {/* RIGHT HERO CONTAINER: CRT ROBOT WITH INTERACTIVE FACE ZOOM & PINK TERMINAL LOGIN */}
-        <div className="w-full md:w-[50%] h-[480px] sm:h-[550px] relative z-10 flex items-center justify-center mt-6 md:mt-0">
+        <div id="robot-container" className="w-full md:w-[50%] h-[440px] sm:h-[550px] relative z-10 flex items-center justify-center mt-6 md:mt-0">
           
           <div className="relative w-full h-full flex items-center justify-center">
             
