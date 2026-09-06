@@ -134,7 +134,7 @@ export const QMLInsightsPage: React.FC = () => {
       }
     };
     
-    fetch('/api/analyze-patient', {
+    fetch('https://qml-solution.onrender.com/api/analyze-patient', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)

@@ -71,7 +71,7 @@ export const XRayAnalysisPage: React.FC = () => {
       const formData = new FormData();
       formData.append('file', file);
       
-      const response = await fetch('/api/upload-xray', {
+      const response = await fetch('https://qml-solution.onrender.com/api/upload-xray', {
         method: 'POST',
         body: formData
       });

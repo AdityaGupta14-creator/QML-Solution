@@ -53,3 +53,4 @@ ENV/
 *.sln
 *.sw?
 Thumbs.db
+.vercel
