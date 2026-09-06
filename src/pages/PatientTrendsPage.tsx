@@ -59,7 +59,7 @@ export const PatientTrendsPage: React.FC = () => {
   const patientId = id || synthPatient.id;
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6 pb-16 font-sans bg-[#f4f2eb] animate-fade-in text-[#111111]">
+    <div className="w-full max-w-7xl mx-auto space-y-6 pb-16 px-4 sm:px-6 font-sans bg-[#f4f2eb] animate-fade-in text-[#111111]">
       <PatientNavTabs currentTab="trends" />
       
       {/* Top Header & Controls */}
@@ -81,7 +81,7 @@ export const PatientTrendsPage: React.FC = () => {
               <span>{isPlaying ? 'LIVE STREAMING TELEMETRY' : 'STREAM PAUSED'}</span>
             </div>
           </div>
-          <h1 className="text-3xl font-serif text-[#111111] font-bold mt-2">Real-time Patient Vital Sign & Biomarker Fluctuations</h1>
+          <h1 className="text-xl sm:text-3xl font-serif text-[#111111] font-bold mt-2">Real-time Patient Vital Sign & Biomarker Fluctuations</h1>
           <p className="text-sm text-[#6b6b6b] mt-0.5">
             Streaming live clinical telemetry for <strong className="text-[#111]">{patientDisplayName}</strong> ({patientId})
           </p>

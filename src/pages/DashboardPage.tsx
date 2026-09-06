@@ -103,7 +103,7 @@ export function DashboardPage() {
 
         {/* Filters and Search Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {(['All', 'Critical', 'Urgent', 'Stable'] as FilterType[]).map((filter) => (
               <button
                 key={filter}

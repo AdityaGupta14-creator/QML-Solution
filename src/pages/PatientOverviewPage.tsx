@@ -68,15 +68,15 @@ export const PatientOverviewPage: React.FC = () => {
 
         {/* Elevated Alert Banner */}
         {showBanner && (
-          <div className="bg-white border-l-4 border-l-[#c2484a] border border-[#d4d0ca] rounded-xl flex items-center justify-between px-4 py-2.5 shadow-xs">
-            <div className="flex items-center gap-2.5 text-[#c2484a]">
-              <AlertCircle size={18} />
+          <div className="bg-white border-l-4 border-l-[#c2484a] border border-[#d4d0ca] rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 px-4 py-2.5 shadow-xs">
+            <div className="flex items-start sm:items-center gap-2.5 text-[#c2484a] flex-wrap">
+              <AlertCircle size={18} className="shrink-0 mt-0.5 sm:mt-0" />
               <span className="font-semibold text-xs">Elevated QML Tuberculosis Risk Pattern — Risk Score: {qmlRiskScore}%</span>
-              <Link to={`/patient/${patient.id}/qml`} className="text-xs underline font-bold ml-2 hover:text-[#9a2a2c]">
+              <Link to={`/patient/${patient.id}/qml`} className="text-xs underline font-bold ml-0 sm:ml-2 hover:text-[#9a2a2c]">
                 Open QML Analysis →
               </Link>
             </div>
-            <button onClick={() => setHideBanner(true)} className="text-[#9a9590] hover:text-[#111111] p-1 cursor-pointer">
+            <button onClick={() => setHideBanner(true)} className="text-[#9a9590] hover:text-[#111111] p-1 cursor-pointer self-end sm:self-auto">
               <X size={16} />
             </button>
           </div>

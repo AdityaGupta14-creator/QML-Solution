@@ -217,7 +217,7 @@ export const XRayAnalysisPage: React.FC = () => {
           <div className="lg:col-span-7 bg-white border border-[#d4d0ca] rounded-2xl p-4 shadow-sm flex flex-col justify-between">
             
             {/* Toolbar */}
-            <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-[#f4f2eb] text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-[#f4f2eb] text-xs overflow-x-auto">
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-semibold text-[#6b6b6b] uppercase">Zoom</span>
                 <button onClick={() => setZoom(Math.max(50, zoom - 10))} className="p-1 text-[#6b6b6b] hover:text-[#111] cursor-pointer"><ZoomOut size={14} /></button>
@@ -268,7 +268,7 @@ export const XRayAnalysisPage: React.FC = () => {
             </div>
 
             {/* Radiograph Display Box */}
-            <div className="relative rounded-xl bg-[#090b0d] h-[410px] flex items-center justify-center border border-[#111] my-2 overflow-hidden">
+            <div className="relative rounded-xl bg-[#090b0d] h-[280px] sm:h-[410px] flex items-center justify-center border border-[#111] my-2 overflow-hidden">
               
               {!imageUrl ? (
                 <div 
@@ -322,7 +322,7 @@ export const XRayAnalysisPage: React.FC = () => {
                     <img 
                       src={analysisResult?.heatmap_overlay_b64 ? `data:image/jpeg;base64,${analysisResult.heatmap_overlay_b64}` : imageUrl} 
                       alt="Radiograph Scan" 
-                      className="block max-h-[385px] w-auto max-w-full object-contain select-none"
+                      className="block max-h-[255px] sm:max-h-[385px] w-auto max-w-full object-contain select-none"
                       style={{
                         filter: `brightness(${brightness}%) contrast(${contrast}%) ${invert ? 'invert(1)' : ''}`,
                       }}
