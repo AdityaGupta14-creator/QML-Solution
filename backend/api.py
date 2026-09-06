@@ -513,6 +513,10 @@ async def health():
         "simulation_ticks": len(history),
     }
 
+@app.get("/")
+async def root():
+    return {"status": "ok", "message": "Q-Sentinel API is running"}
+
 
 # ── Main ─────────────────────────────────────────────────────────────────────
 
