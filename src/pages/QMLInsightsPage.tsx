@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PatientNavTabs } from '@/components/PatientNavTabs';
 import { Sparkles, ArrowLeft, Heart, Droplets, TestTube, Image as ImageIcon, Activity, ShieldCheck, HelpCircle } from 'lucide-react';
@@ -98,11 +98,55 @@ export const QMLInsightsPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [selectedQubit, setSelectedQubit] = useState<number | null>(0);
+  const [liveMetrics, setLiveMetrics] = useState<any>(null);
 
   const patient = id ? PATIENTS_LIST.find(p => p.id === id) || PATIENTS_LIST[0] : PATIENTS_LIST[0];
   const qmlMetrics = id ? PATIENT_QML_METRICS[id] : null;
-  const qmlRiskScore = qmlMetrics?.riskScore ?? patient.qmlRiskScore ?? 78;
-  const classicalRisk = Math.max(10, qmlRiskScore - 12);
+
+  useEffect(() => {
+    if (!patient) return;
+    
+    // Map patient vitals to the format backend expects (mocking some missing ones)
+    const payload = {
+      vitals: {
+        heart_rate: patient.vitals.heartRate,
+        spo2: patient.vitals.oxygen,
+        resp_rate: patient.vitals.respiratoryRate,
+        temperature: patient.vitals.temperature,
+        wbc_count: 11,
+        esr: 45,
+        crp: 22,
+        lymphocyte_pct: 18,
+        hemoglobin: 12.5,
+        albumin: 3.2,
+        platelet_count: 250,
+        blood_sugar: 110,
+        xray_opacity: 0.5,
+        xray_cavity: 0.1,
+        xray_nodule: 0.6,
+        xray_pleural: 0.2,
+        ada_level: 35,
+        mantoux_mm: 12,
+        sputum_afb: 0,
+        genexpert_ct: 30,
+        bmi: 18.5,
+        treatment_days: 2
+      }
+    };
+    
+    fetch('/api/analyze-patient', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => setLiveMetrics(data))
+    .catch(err => console.error("API error", err));
+  }, [patient]);
+
+  const qmlRiskScore = liveMetrics?.quantum_ml?.risk_score ?? qmlMetrics?.riskScore ?? patient.qmlRiskScore ?? 78;
+  const classicalRisk = liveMetrics?.classical_ml?.risk_score ?? Math.max(10, qmlRiskScore - 12);
+  const quantumFidelity = liveMetrics ? Math.max(0, 1 - (liveMetrics.quantum_ml?.von_neumann_entropy || 0) / 5).toFixed(3) : "0.952";
 
   const activeQubitInfo = selectedQubit !== null ? QUBIT_LAYMAN_GUIDE[selectedQubit] : QUBIT_LAYMAN_GUIDE[0];
 
@@ -159,9 +203,9 @@ export const QMLInsightsPage: React.FC = () => {
           <div className="bg-white border border-[#d4d0ca] rounded-xl p-4 shadow-xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono uppercase text-[#4a7c6f]">Quantum State Fidelity</span>
-              <span className="text-[10px] bg-[#4a7c6f]/10 text-[#4a7c6f] px-2 py-0.5 rounded-full font-mono font-bold">95.2%</span>
+              <span className="text-[10px] bg-[#4a7c6f]/10 text-[#4a7c6f] px-2 py-0.5 rounded-full font-mono font-bold">{Number(quantumFidelity) * 100}%</span>
             </div>
-            <div className="text-3xl font-mono font-bold text-[#4a7c6f] mt-2">0.952</div>
+            <div className="text-3xl font-mono font-bold text-[#4a7c6f] mt-2">{quantumFidelity}</div>
             <p className="text-[11px] text-[#6b6b6b] mt-1">Zero-noise quantum measurement signal sharpness</p>
           </div>
         </div>

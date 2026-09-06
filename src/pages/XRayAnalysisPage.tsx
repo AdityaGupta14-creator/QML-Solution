@@ -38,6 +38,7 @@ interface AnalysisResult {
   qmlTbLikelihood: number;
   classicalTbLikelihood: number;
   quantumFidelity: number;
+  heatmap_overlay_b64?: string;
   zones: ZoneData[];
   findings: Finding[];
 }
@@ -59,43 +60,66 @@ export const XRayAnalysisPage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
 
-  const processCustomFile = (file: File) => {
+  const processCustomFile = async (file: File) => {
     const url = URL.createObjectURL(file);
     setImageUrl(url);
     setIsAnalyzing(true);
     setAnalysisResult(null);
     setSelectedZone(1);
 
-    setTimeout(() => {
-      setAnalysisResult({
-        opacity: 0.65,
-        cavity: 0.72,
-        nodule: 0.48,
-        pleural: 0.30,
-        qmlTbLikelihood: 84.6,
-        classicalTbLikelihood: 71.2,
-        quantumFidelity: 0.948,
-        zones: Array.from({ length: 9 }, (_, i) => ({
-          id: i + 1,
-          name: `Zone ${i + 1}`,
-          risk: i === 0 || i === 3 ? 0.85 : 0.22,
-          features: {
-            intensity: Math.random() * 0.4 + 0.4,
-            texture: Math.random() * 0.5 + 0.3,
-            opacity: Math.random() * 0.5 + 0.2,
-          },
-          qmlScore: i === 0 || i === 3 ? 88.5 : 21.0,
-          classicalScore: i === 0 || i === 3 ? 73.0 : 23.5,
-          anomalyType: i === 0 ? 'Apical Cavitary Opacity' : i === 3 ? 'Infiltrate Region' : 'Normal Parenchyma'
-        })),
-        findings: [
-          { text: 'Zone 1: Upper right apical opacity detected by Quantum Circuit Ansatz', severity: 'critical', zoneId: 1 },
-          { text: 'Zone 4: Mid-zone parenchymal density fluctuation noted', severity: 'warning', zoneId: 4 },
-          { text: 'Left hemithorax shows clear lung fields and intact diaphragm', severity: 'normal' },
-        ],
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await fetch('/api/upload-xray', {
+        method: 'POST',
+        body: formData
       });
+      
+      const data = await response.json();
+      
+      const zones = (data.xray_analysis?.zones || []).map((z: any) => ({
+        id: z.zone_id,
+        name: `Zone ${z.zone_id}`,
+        risk: z.qml_zone_risk / 100 || 0,
+        features: {
+          intensity: z.mean_intensity || 0,
+          texture: z.max_intensity || 0,
+          opacity: z.cv_features?.opacity || 0,
+        },
+        qmlScore: z.qml_details?.risk_score || 0,
+        classicalScore: z.qml_zone_risk || 0,
+        anomalyType: 'Analyzed Region'
+      }));
+
+      const findings = (data.advisory || []).map((a: any) => ({
+        text: `${a.title || 'Note'}: ${a.message || ''} ${a.action || ''}`.trim(),
+        severity: (a.severity === 'critical' || a.severity === 'error') ? 'critical' : a.severity === 'warning' ? 'warning' : 'normal'
+      }));
+      
+      if (data.gemini_report) {
+         findings.unshift({ text: `AI Report: ${data.gemini_report}`, severity: 'warning' });
+      }
+
+      setAnalysisResult({
+        opacity: data.xray_analysis?.opacity_score || 0,
+        cavity: data.xray_analysis?.cavity_probability || 0,
+        nodule: data.xray_analysis?.nodule_density || 0,
+        pleural: data.xray_analysis?.pleural_thickening || 0,
+        qmlTbLikelihood: data.qml_with_xray?.tb_probability * 100 || 0,
+        classicalTbLikelihood: (data.xray_analysis?.opacity_score || 0) * 100,
+        quantumFidelity: Math.max(0, 1 - (data.qml_with_xray?.von_neumann_entropy || 0) / 5),
+        heatmap_overlay_b64: data.xray_analysis?.heatmap_overlay_b64,
+        zones: zones.length > 0 ? zones : Array.from({ length: 9 }, (_, i) => ({
+          id: i + 1, name: `Zone ${i + 1}`, risk: 0.1, features: { intensity: 0, texture: 0, opacity: 0 }, qmlScore: 10, classicalScore: 10, anomalyType: 'Normal'
+        })),
+        findings: findings,
+      });
+    } catch (err) {
+      console.error("X-Ray upload failed:", err);
+    } finally {
       setIsAnalyzing(false);
-    }, 1800);
+    }
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,7 +143,7 @@ export const XRayAnalysisPage: React.FC = () => {
     setInvert(false);
   };
 
-  const formatPercent = (val: number) => `${(val * 100).toFixed(0)}%`;
+  const formatPercent = (val: number) => `${(val * 100).toFixed(1)}%`;
 
   const getZoneColor = (risk: number) => {
     if (risk < 0.3) return 'rgba(90, 138, 110, 0.25)';
@@ -285,12 +309,17 @@ export const XRayAnalysisPage: React.FC = () => {
                   <div 
                     className="relative inline-block overflow-hidden rounded-lg shadow-lg"
                     style={{
-                      transform: `scale(${zoom / 100})`,
-                      transformOrigin: 'center'
+                      transform: selectedZone && analysisResult ? `scale(${Math.max(zoom / 100, 2)})` : `scale(${zoom / 100})`,
+                      transformOrigin: selectedZone ? [
+                        '0% 0%', '50% 0%', '100% 0%',
+                        '0% 50%', '50% 50%', '100% 50%',
+                        '0% 100%', '50% 100%', '100% 100%'
+                      ][selectedZone - 1] : 'center',
+                      transition: 'all 0.3s ease-in-out'
                     }}
                   >
                     <img 
-                      src={imageUrl} 
+                      src={analysisResult?.heatmap_overlay_b64 ? `data:image/jpeg;base64,${analysisResult.heatmap_overlay_b64}` : imageUrl} 
                       alt="Radiograph Scan" 
                       className="block max-h-[385px] w-auto max-w-full object-contain select-none"
                       style={{
@@ -304,7 +333,7 @@ export const XRayAnalysisPage: React.FC = () => {
                         {analysisResult.zones.map((zone) => (
                           <div 
                             key={zone.id}
-                            onClick={() => setSelectedZone(zone.id)}
+                            onClick={() => setSelectedZone(selectedZone === zone.id ? null : zone.id)}
                             className={cn(
                               "relative border border-dashed cursor-pointer transition-all flex items-start justify-start p-1.5",
                               selectedZone === zone.id ? "ring-2 ring-white z-10" : ""
